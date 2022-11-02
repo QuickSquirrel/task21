@@ -5,7 +5,10 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-#      - export IMAGE_TAG_VER=$(cat ./ver.txt)
+      - git checkout main
+      - echo Change version in file index.html 
+      - sed -i "24 s/21.*/21.$CODEBUILD_BUILD_NUMBER<center><\/h2>/" index.html
+
   build:
     commands:
       - echo Build started on `date`
@@ -19,8 +22,9 @@ phases:
       - echo Pushing the Docker image...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:21.$CODEBUILD_BUILD_NUMBER
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest
-#      - let IMAGE_TAG_VER++
-#      - echo $IMAGE_TAG_VER > ver.txt
-#      - git add *
-#      - git commit -m "Current Build v.21.$IMAGE_TAG_VER"
-#      - git push origin
+      - sleep 60
+      - echo Add information about vertion to README.md
+      - echo "###### $(TZ=GMT-3 date '+%F %H:%M:%S') Now on PROD version 21.$CODEBUILD_BUILD_NUMBER" >> README.md
+      - git add *
+      - git commit -m "Current Build v.21.$IMAGE_TAG_VER"
+      - git push origin
