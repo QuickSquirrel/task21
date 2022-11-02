@@ -11,14 +11,14 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...          
       - docker build -f lbe.dockerfile -t lbe:21.$CODEBUILD_BUILD_NUMBER .
-      - docker tag lbe:21.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
-      - docker tag lbe:21.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:21.$CODEBUILD_BUILD_NUMBER
+      - docker tag lbe:21.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest
+      - docker tag lbe:21.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:21.$CODEBUILD_BUILD_NUMBER
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:21.$CODEBUILD_BUILD_NUMBER
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:21.$CODEBUILD_BUILD_NUMBER
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest
 #      - let IMAGE_TAG_VER++
 #      - echo $IMAGE_TAG_VER > ver.txt
 #      - git add *
