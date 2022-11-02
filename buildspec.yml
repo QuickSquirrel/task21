@@ -21,3 +21,7 @@ phases:
       - echo Pushing the Docker image...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:21.$CODEBUILD_BUILD_NUMBER
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest
+      - printf '[{"name":"WebContainter","imageUri":"AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest"}]' > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
