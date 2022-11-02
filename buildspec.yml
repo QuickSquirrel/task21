@@ -1,0 +1,26 @@
+version: 1.0
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - export IMAGE_TAG_VER=$(cat ./ver.txt)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -f lbe.lbe.dockerfile -t lbe:21.$IMAGE_TAG_VER .
+      - docker tag lbe:21.$IMAGE_TAG_VER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - docker tag lbe:21.$IMAGE_TAG_VER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:21.$IMAGE_TAG_VER
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:21.$IMAGE_TAG_VER
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - let IMAGE_TAG_VER++
+      - echo $IMAGE_TAG_VER > ver.txt
+      - git add *
+      - git commit -m "Current Build v.21.$IMAGE_TAG_VER"
+      - git push origin
