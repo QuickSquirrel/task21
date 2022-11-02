@@ -23,6 +23,8 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:21.$CODEBUILD_BUILD_NUMBER
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/lbe:latest
       - sleep 60
+      - git config --global user.name "CodeBuild"
+      - git config --global user.email codebuild@auto.local
       - echo Add information about vertion to README.md
       - echo "###### $(TZ=GMT-3 date '+%F %H:%M:%S') Now on PROD version 21.$CODEBUILD_BUILD_NUMBER" >> README.md
       - git add *
