@@ -29,4 +29,4 @@ phases:
       - echo "###### $(TZ=GMT-3 date '+%F %H:%M:%S') Now on PROD version 21.$CODEBUILD_BUILD_NUMBER" >> README.md
       - git add *
       - git commit -m "Current Build v.21.$IMAGE_TAG_VER"
-      - git push origin
+      - git push --set-upstream origin main
