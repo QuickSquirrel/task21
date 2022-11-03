@@ -6,6 +6,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo Change version in file index.html 
+      - docker login -u quicksquirrel -p 17Put1nHuyl0
       - sed -i "24 s/21.*/21.$CODEBUILD_BUILD_NUMBER<center><\/h2>/" index.html
 
   build:
